@@ -14,6 +14,7 @@ class Table:
             self.players.append(Player())
         self.dealer = Dealer()
         self.currentPlayer = None
+        self.casinoEarnings = 0
         self.stratHard = utils.readArray('strategyHard.txt')
         self.stratSoft = utils.readArray('strategySoft.txt')
         self.stratSplits = utils.readArray('strategySplits.txt')

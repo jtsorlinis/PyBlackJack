@@ -24,6 +24,8 @@ for player in table1.players:
     if(not player.splitFrom):
         print("Player " + str(player.playerNum) + " earnings: " + str(player.earnings) + "\t\tWin percentage: " + str(50+(player.earnings/rounds*5)))
 
+print("Casino earnings: " + str(table1.casinoEarnings))
+
 end = time.perf_counter()
 duration = end - start
 print ("Played " + str(x) + " rounds in " + format(duration, ".2f") + " seconds")
