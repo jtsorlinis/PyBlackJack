@@ -5,8 +5,8 @@ from table import Table
 from cardpile import CardPile
 import time
 
-rounds = 100
-verbose = True
+rounds = 10000
+verbose = False
 
 table1 = Table(5,8,10,verbose)
 table1.cardpile.shuffle()

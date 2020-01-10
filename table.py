@@ -111,29 +111,32 @@ class Table:
         self.hit()
 
     def autoPlay(self):
-        row = self.currentPlayer.value
-        column = str(self.dealer.upCard())
-        if(self.currentPlayer.canSplit() and self.currentPlayer.canSplit() not in [5, 10, "J", "Q", "K"]):
-            for x in self.stratSplits:
-                if(x[0] == str(self.currentPlayer.canSplit())):
-                    self.do(x[self.stratSplits[0].index(column)])
-                    break
-        elif(self.currentPlayer.isSoft):
-            if (row > 19):
-                row = 19
-            if (row < 13):
-                row = 13
-            for x in self.stratSoft:
-                if(x[0] == str(row)):
-                    self.do(x[self.stratSoft[0].index(column)])
+        if(len(self.currentPlayer.hand) < 5):
+            row = self.currentPlayer.value
+            column = str(self.dealer.upCard())
+            if(self.currentPlayer.canSplit() and self.currentPlayer.canSplit() not in [5, 10, "J", "Q", "K"]):
+                for x in self.stratSplits:
+                    if(x[0] == str(self.currentPlayer.canSplit())):
+                        self.do(x[self.stratSplits[0].index(column)])
+                        break
+            elif(self.currentPlayer.isSoft):
+                if (row > 19):
+                    row = 19
+                if (row < 13):
+                    row = 13
+                for x in self.stratSoft:
+                    if(x[0] == str(row)):
+                        self.do(x[self.stratSoft[0].index(column)])
+            else:
+                if (row > 17):
+                    row = 17
+                if (row < 8):
+                    row = 8
+                for x in self.stratHard:
+                    if(x[0] == str(row)):
+                        self.do(x[self.stratHard[0].index(column)])
         else:
-            if (row > 17):
-                row = 17
-            if (row < 8):
-                row = 8
-            for x in self.stratHard:
-                if(x[0] == str(row)):
-                    self.do(x[self.stratHard[0].index(column)])
+            self.stand()
     
     def do(self, action):
         if action == 'H':
