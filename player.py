@@ -5,7 +5,7 @@ class Player:
         self.hand = []
         self.value = 0
         self.earnings = 0
-        self.hasAce = False
+        self.aces = 0
         self.isSoft = False
         self.isSplit = False
         self.splitFrom = split
@@ -25,7 +25,7 @@ class Player:
     def resetHand(self):
         self.hand = []
         self.value = 0
-        self.hasAce = False
+        self.aces = 0
         self.isSoft = False
         self.isSplit = False
         self.betMult = 1
@@ -60,15 +60,19 @@ class Player:
         return output
 
     def evaluate(self):
+        self.aces = 0
         self.value = 0
         for card in self.hand:
             self.value += card.evaluate()
             # Check for an ace
             if card.rank == 'A':
-                self.hasAce = True
+                self.aces += 1
                 self.isSoft = True
-        if self.value > 21:
-            if self.hasAce:
+
+        if self.aces == 0:
+            self.isSoft = False
+
+        while(self.value > 21 and self.aces > 0):
                 self.value -= 10
-                self.isSoft = False
+                self.aces -= 1
         return self.value
