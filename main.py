@@ -3,6 +3,7 @@ from deck import Deck
 from player import Player
 from table import Table
 from cardpile import CardPile
+import time
 
 table1 = Table(5,8,10)
 table1.cardpile.shuffle()
@@ -10,6 +11,7 @@ table1.cardpile.shuffle()
 rounds = 100
 
 x=0
+start = time.perf_counter()
 while(x<rounds):
     print("Round " + str(x))
     table1.startRound()
@@ -19,3 +21,7 @@ while(x<rounds):
 for player in table1.players:
     if(not player.splitFrom):
         print("Player " + str(player.playerNum) + " win percentage: " + str(50+(player.earnings/rounds*5)))
+
+end = time.perf_counter()
+duration = end - start
+print ("Played " + str(x) + " rounds in " + format(duration, ".2f") + " seconds")

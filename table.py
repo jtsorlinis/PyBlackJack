@@ -1,6 +1,7 @@
 from dealer import Dealer
 from player import Player
 from cardpile import CardPile
+import utils
 
 class Table:
     def __init__(self, numplayers, numofdecks, betsize):
@@ -12,6 +13,9 @@ class Table:
             self.players.append(Player())
         self.dealer = Dealer()
         self.currentPlayer = None
+        self.stratHard = utils.readArray('strategyHard.txt')
+        self.stratSoft = utils.readArray('strategySoft.txt')
+        self.stratSplits = utils.readArray('strategySplits.txt')
 
     def dealRound(self):
         for player in self.players:
@@ -92,36 +96,50 @@ class Table:
         print("Player " + str(self.currentPlayer.playerNum) + " splits")
         self.print()
         self.hit()
+    
+    def double(self):
+        if (self.currentPlayer.betMult == 1):
+            self.currentPlayer.double()
+            print("Player " + str(self.currentPlayer.playerNum) + " doubles")
+        self.hit()
 
     def autoPlay(self):
-        if(self.currentPlayer.canSplit() in [2,3,4,6,7]):
-            if(self.dealer.upCard() in range(2,7)):
-                self.split()
-            else:
-                self.hit()
-        elif(self.currentPlayer.canSplit() in [8, 9, "A"]):
-            self.split()
-        elif(len(self.currentPlayer.hand) < 5):
-            if(self.currentPlayer.isSoft):
-                if(self.currentPlayer.value <= 17):
-                    self.hit()
-                elif(self.currentPlayer.value == 18 and self.dealer.upCard() not in range(2,8)):
-                    self.hit()
-                else:
-                    self.stand()
-                
-            else:
-                if(self.currentPlayer.value <= 11):
-                    self.hit()
-                elif(self.currentPlayer.value == 12 and self.dealer.upCard() not in [4,5,6]):
-                    self.hit()
-                elif(13 <= self.currentPlayer.value <= 16 and self.dealer.upCard() not in [2,3,4,5,6]):
-                    self.hit()
-                else:
-                    self.stand()
+        row = self.currentPlayer.value
+        column = str(self.dealer.upCard())
+        if(self.currentPlayer.canSplit() and self.currentPlayer.canSplit() not in [5, 10, "J", "Q", "K"]):
+            for x in self.stratSplits:
+                if(x[0] == str(self.currentPlayer.canSplit())):
+                    self.do(x[self.stratSplits[0].index(column)])
+                    break
+        elif(self.currentPlayer.isSoft):
+            if (row > 19):
+                row = 19
+            if (row < 13):
+                row = 13
+            for x in self.stratSoft:
+                if(x[0] == str(row)):
+                    self.do(x[self.stratSoft[0].index(column)])
         else:
+            if (row > 17):
+                row = 17
+            if (row < 8):
+                row = 8
+            for x in self.stratHard:
+                if(x[0] == str(row)):
+                    self.do(x[self.stratHard[0].index(column)])
+    
+    def do(self, action):
+        if action == 'H':
+            self.hit()
+        elif action == 'S':
             self.stand()
-        
+        elif action == 'D':
+            self.double()
+        elif action == 'P':
+            self.split()
+        else:
+            exit()
+
     def dealerPlay(self):
         allBusted = True
         for player in self.players:

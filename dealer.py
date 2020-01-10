@@ -16,7 +16,7 @@ class Dealer(Player):
         self.hideSecond = True
 
     def upCard(self):
-        return self.hand[0].rank
+        return self.hand[0].evaluate()
 
     def print(self):
         output = "Player " + str(self.playerNum) + ": "
