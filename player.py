@@ -1,27 +1,47 @@
 class Player:
     playerNumCount = 0
 
-    def __init__(self,strategy):
-        self.strategy = strategy
+    def __init__(self,split=None):
         self.hand = []
         self.value = 0
         self.earnings = 0
         self.hasAce = False
         self.isSoft = False
-        Player.playerNumCount += 1
-        self.playerNum = Player.playerNumCount
+        self.isSplit = False
+        self.splitFrom = split
+
+        if(split):
+            self.hand = [split.hand[1]]
+            self.playerNum = str(split.playerNum) + "S"
+            self.isSplit = True
+        else:
+            Player.playerNumCount += 1
+            self.playerNum = Player.playerNumCount
 
     def resetHand(self):
         self.hand = []
         self.value = 0
         self.hasAce = False
         self.isSoft = False
+        self.isSplit = False
+
+    def canSplit(self):
+        if(len(self.hand) == 2 and (self.hand[0].rank == self.hand[1].rank) and self.isSplit == False):
+            return self.hand[0].rank
+        else:
+            return False
 
     def win(self, table):
-        self.earnings += table.betsize
+        if(self.splitFrom):
+            self.splitFrom.earnings += table.betsize
+        else:
+            self.earnings += table.betsize
 
     def lose(self, table):
-        self.earnings -= table.betsize
+        if(self.splitFrom):
+            self.splitFrom.earnings -= table.betsize
+        else:
+            self.earnings -= table.betsize
 
     def print(self):
         output = "Player " + str(self.playerNum) + ": "

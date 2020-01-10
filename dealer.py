@@ -7,6 +7,7 @@ class Dealer(Player):
         self.hideSecond = True
         self.value = 0
         self.hasAce = False
+        self.isSoft = False
 
     def resetHand(self):
         self.hand = []

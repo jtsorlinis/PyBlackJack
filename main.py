@@ -17,4 +17,5 @@ while(x<rounds):
     x+=1
 
 for player in table1.players:
-    print("Player " + str(player.playerNum) + " win percentage: " + str(50+(player.earnings/rounds*5)))
+    if(not player.splitFrom):
+        print("Player " + str(player.playerNum) + " win percentage: " + str(50+(player.earnings/rounds*5)))

@@ -9,7 +9,7 @@ class Table:
         self.numofdecks = numofdecks
         self.cardpile = CardPile(numofdecks)
         for _ in range (0, numplayers):
-            self.players.append(Player(1))
+            self.players.append(Player())
         self.dealer = Dealer()
         self.currentPlayer = None
 
@@ -47,7 +47,10 @@ class Table:
 
     def clear(self):
         for player in self.players:
-            player.resetHand()
+            if (player.splitFrom):
+                self.players.remove(player)
+            else:
+                player.resetHand()
         self.dealer.resetHand()
 
     def deal(self):
@@ -79,12 +82,30 @@ class Table:
     def stand(self):
         self.nextPlayer()
 
+    def split(self):
+        splitPlayer = Player(self.currentPlayer)
+        self.players.insert(self.players.index(self.currentPlayer)+1, splitPlayer)
+        self.currentPlayer.hand.pop()
+        self.currentPlayer.isSplit = True
+        self.currentPlayer.evaluate()
+        splitPlayer.evaluate()
+        print("Player " + str(self.currentPlayer.playerNum) + " splits")
+        self.print()
+        self.hit()
+
     def autoPlay(self):
-        if(len(self.currentPlayer.hand) < 5):
+        if(self.currentPlayer.canSplit() in [2,3,4,6,7]):
+            if(self.dealer.upCard() in range(2,7)):
+                self.split()
+            else:
+                self.hit()
+        elif(self.currentPlayer.canSplit() in [8, 9, "A"]):
+            self.split()
+        elif(len(self.currentPlayer.hand) < 5):
             if(self.currentPlayer.isSoft):
                 if(self.currentPlayer.value <= 17):
                     self.hit()
-                elif(self.currentPlayer.value == 18 and self.dealer.upCard not in range(2,8)):
+                elif(self.currentPlayer.value == 18 and self.dealer.upCard() not in range(2,8)):
                     self.hit()
                 else:
                     self.stand()
@@ -121,8 +142,8 @@ class Table:
             self.finishRound()
 
     def nextPlayer(self):
-        if self.currentPlayer.playerNum < len(self.players):
-            self.currentPlayer = self.players[self.currentPlayer.playerNum]   
+        if (self.currentPlayer != self.dealer and self.players.index(self.currentPlayer) < len(self.players)-1):
+            self.currentPlayer = self.players[self.players.index(self.currentPlayer)+1]
             self.autoPlay() 
         else:
             self.currentPlayer = self.dealer
@@ -143,18 +164,21 @@ class Table:
         for player in self.players:
             if player.value > 21:
                 player.lose(self)
-                print("Player " + str(player.playerNum) + " Busts\t Earnings: " + str(player.earnings))
+                print("Player " + str(player.playerNum) + " Busts")
             elif self.dealer.value > 21:
                 player.win(self)
-                print("Player " + str(player.playerNum) + " Wins\t Earnings: " + str(player.earnings))
+                print("Player " + str(player.playerNum) + " Wins")
             elif player.value > self.dealer.value:
                 player.win(self)
-                print("Player " + str(player.playerNum) + " Wins\t Earnings: " + str(player.earnings))
+                print("Player " + str(player.playerNum) + " Wins")
             elif player.value == self.dealer.value:
-                print("Player " + str(player.playerNum) + " Draws\t Earnings: " + str(player.earnings))
+                print("Player " + str(player.playerNum) + " Draws")
             else:
                 player.lose(self)
-                print("Player " + str(player.playerNum) + " Loses\t Earnings: " + str(player.earnings))
+                print("Player " + str(player.playerNum) + " Loses")
+        for player in self.players:
+            if(not player.splitFrom):
+                print("Player " + str(player.playerNum) + " Earnings: " + str(player.earnings))
         print("\n")
 
     def print(self):
