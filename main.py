@@ -5,7 +5,7 @@ from table import Table
 from cardpile import CardPile
 import time
 
-rounds = 10000
+rounds = 100000
 verbose = False
 
 table1 = Table(5,8,10,verbose)

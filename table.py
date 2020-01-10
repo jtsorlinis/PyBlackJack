@@ -42,7 +42,10 @@ class Table:
         self.dealRound()
         self.dealDealer()
         self.postDeal()
-        if(self.checkDealerNatural() == False):
+        if(self.checkDealerNatural()):
+            self.finishRound()
+        else:
+            self.checkPlayerNatural()
             if(self.verbose):
                 self.print()
 
@@ -181,13 +184,17 @@ class Table:
             self.currentPlayer = self.dealer
             self.dealerPlay()
 
+    def checkPlayerNatural(self):
+        for player in self.players:
+            if(player.value == 21):
+                player.hasNatural = 1
+
     def checkDealerNatural(self):
         if (self.dealer.evaluate() == 21):
             self.dealer.hideSecond = False
             if(self.verbose):
                 self.print()
                 print("Dealer has a natural 21\n")
-            self.finishRound()
             return True
         else:
             return False
@@ -196,7 +203,11 @@ class Table:
         if(self.verbose):
             print("Scoring round")
         for player in self.players:
-            if player.value > 21:
+            if player.hasNatural:
+                player.win(self, 1.5)
+                if(self.verbose):  
+                    print("Player " + str(player.playerNum) + " wins with a natural 21")
+            elif player.value > 21:
                 player.lose(self)
                 if(self.verbose):
                     print("Player " + str(player.playerNum) + " Busts")

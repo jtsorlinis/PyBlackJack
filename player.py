@@ -10,6 +10,7 @@ class Player:
         self.isSplit = False
         self.splitFrom = split
         self.betMult = 1
+        self.hasNatural = 0
 
         if(split):
             self.hand = [split.hand[1]]
@@ -29,6 +30,7 @@ class Player:
         self.isSoft = False
         self.isSplit = False
         self.betMult = 1
+        self.hasNatural = 0
 
     def canSplit(self):
         if(len(self.hand) == 2 and (self.hand[0].rank == self.hand[1].rank) and self.isSplit == False):
@@ -36,11 +38,11 @@ class Player:
         else:
             return False
 
-    def win(self, table):
+    def win(self, table, mult=1):
         if(self.splitFrom):
-            self.splitFrom.earnings += table.betsize * self.betMult
+            self.splitFrom.earnings += table.betsize * self.betMult * mult
         else:
-            self.earnings += table.betsize * self.betMult
+            self.earnings += table.betsize * self.betMult * mult
 
     def lose(self, table):
         if(self.splitFrom):
