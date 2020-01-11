@@ -69,22 +69,6 @@ class Table:
         card = self.cardpile.cards.pop()
         self.currentPlayer.hand.append(card)
 
-    def play(self):
-        if (self.currentPlayer.value < 21):
-            if len(self.currentPlayer.hand) < 5:
-                inp = input("Player" + str(self.currentPlayer.playerNum) + "\n1. Hit\n2. Stay\nChoose an option:")
-                if inp == "1":
-                    print("")
-                    self.deal()
-                    self.currentPlayer.evaluate()
-                    self.print()
-                    self.play()
-                if inp == "2":
-                    self.print()
-                    self.nextPlayer()
-        else:
-            self.nextPlayer()
-
     def hit(self):
         if(self.verbose):
             print("Player " + str(self.currentPlayer.playerNum) + " hits")
@@ -115,12 +99,17 @@ class Table:
         self.hit()
 
     def autoPlay(self):
+        # while(len(self.currentPlayer.hand) < 5 and self.currentPlayer.value < 17):
+        #     self.hit()
+
         if(len(self.currentPlayer.hand) < 5):
             row = self.currentPlayer.value
             column = str(self.dealer.upCard())
             if(self.currentPlayer.canSplit() and self.currentPlayer.canSplit() not in [5, 10, "J", "Q", "K"]):
                 for x in self.stratSplits:
                     if(x[0] == str(self.currentPlayer.canSplit())):
+                        if(self.verbose == 2):
+                            print("Split: " + str(self.currentPlayer.canSplit()) + " " + str(column) + " " + str(x[self.stratSoft[0].index(column)]))
                         self.do(x[self.stratSplits[0].index(column)])
                         break
             elif(self.currentPlayer.isSoft):
@@ -130,7 +119,10 @@ class Table:
                     row = 13
                 for x in self.stratSoft:
                     if(x[0] == str(row)):
+                        if(self.verbose == 2):
+                            print("Soft: " + str(row) + " " + str(column) + " " + str(x[self.stratSoft[0].index(column)]))
                         self.do(x[self.stratSoft[0].index(column)])
+                        break
             else:
                 if (row > 17):
                     row = 17
@@ -138,7 +130,10 @@ class Table:
                     row = 8
                 for x in self.stratHard:
                     if(x[0] == str(row)):
+                        if(self.verbose == 2):
+                            print("Hard: " + str(row) + " " + str(column) + " " + str(x[self.stratSoft[0].index(column)]))
                         self.do(x[self.stratHard[0].index(column)])
+                        break
         else:
             self.stand()
     

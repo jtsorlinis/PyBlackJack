@@ -40,17 +40,17 @@ class Player:
 
     def win(self, table, mult=1):
         if(self.splitFrom):
-            self.splitFrom.earnings += table.betsize * self.betMult * mult
+            self.splitFrom.earnings += (table.betsize * self.betMult * mult)
         else:
-            self.earnings += table.betsize * self.betMult * mult
-        table.casinoEarnings -= table.betsize * self.betMult * mult
+            self.earnings += (table.betsize * self.betMult * mult)
+        table.casinoEarnings -= (table.betsize * self.betMult * mult)
 
     def lose(self, table):
         if(self.splitFrom):
-            self.splitFrom.earnings -= table.betsize * self.betMult
+            self.splitFrom.earnings -= (table.betsize * self.betMult)
         else:
-            self.earnings -= table.betsize * self.betMult
-        table.casinoEarnings += table.betsize * self.betMult
+            self.earnings -= (table.betsize * self.betMult)
+        table.casinoEarnings += (table.betsize * self.betMult)
 
     def print(self):
         output = "Player " + str(self.playerNum) + ": "
@@ -73,10 +73,11 @@ class Player:
                 self.aces += 1
                 self.isSoft = True
 
-        if self.aces == 0:
-            self.isSoft = False
-
         while(self.value > 21 and self.aces > 0):
                 self.value -= 10
                 self.aces -= 1
+        
+        if self.aces == 0:
+            self.isSoft = False
+
         return self.value
