@@ -8,6 +8,7 @@ class Player:
         self.aces = 0
         self.isSoft = False
         self.isSplit = False
+        self.isDone = False
         self.splitFrom = split
         self.betMult = 1
         self.hasNatural = 0
@@ -29,6 +30,7 @@ class Player:
         self.aces = 0
         self.isSoft = False
         self.isSplit = False
+        self.isDone = False
         self.betMult = 1
         self.hasNatural = 0
 

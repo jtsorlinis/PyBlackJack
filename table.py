@@ -74,10 +74,9 @@ class Table:
             print("Player " + str(self.currentPlayer.playerNum) + " hits")
         self.deal()
         self.currentPlayer.evaluate()
-        self.autoPlay()
 
     def stand(self):
-        self.nextPlayer()
+        self.currentPlayer.isDone = True
 
     def split(self):
         splitPlayer = Player(self.currentPlayer)
@@ -98,44 +97,51 @@ class Table:
                 print("Player " + str(self.currentPlayer.playerNum) + " doubles")
         self.hit()
 
+    def playHard(self):
+        tempval = self.currentPlayer.value
+        if (tempval > 17):
+            tempval = 17
+        if (tempval < 8):
+            tempval = 8
+        for x in self.stratHard:
+            if(x[0] == str(tempval)):
+                if(self.verbose == 2):
+                    print("Soft: " + str(tempval) + " " + str(self.dealer.upCard()) + " " + str(x[self.stratSoft[0].index(str(self.dealer.upCard()))]))
+                return x[self.stratSoft[0].index(str(self.dealer.upCard()))]
+
+    def playSoft(self):
+        tempval = self.currentPlayer.value
+        if (tempval > 19):
+            tempval = 19
+        if (tempval < 13):
+            tempval = 13
+        for x in self.stratSoft:
+            if(x[0] == str(tempval)):
+                if(self.verbose == 2):
+                    print("Soft: " + str(tempval) + " " + str(self.dealer.upCard()) + " " + str(x[self.stratSoft[0].index(str(self.dealer.upCard()))]))
+                return x[self.stratSoft[0].index(str(self.dealer.upCard()))]
+
+    def playSplit(self):
+        for x in self.stratSplits:
+            if(x[0] == str(self.currentPlayer.canSplit())):
+                if(self.verbose == 2):
+                    print("Split: " + str(self.currentPlayer.canSplit()) + " " + str(self.dealer.upCard()) + " " + str(x[self.stratSoft[0].index(self.dealer.upCard())]))
+                return x[self.stratSplits[0].index(str(self.dealer.upCard()))]
+
     def autoPlay(self):
         # while(len(self.currentPlayer.hand) < 5 and self.currentPlayer.value < 17):
         #     self.hit()
-
-        if(len(self.currentPlayer.hand) < 5):
-            row = self.currentPlayer.value
-            column = str(self.dealer.upCard())
-            if(self.currentPlayer.canSplit() and self.currentPlayer.canSplit() not in [5, 10, "J", "Q", "K"]):
-                for x in self.stratSplits:
-                    if(x[0] == str(self.currentPlayer.canSplit())):
-                        if(self.verbose == 2):
-                            print("Split: " + str(self.currentPlayer.canSplit()) + " " + str(column) + " " + str(x[self.stratSoft[0].index(column)]))
-                        self.do(x[self.stratSplits[0].index(column)])
-                        break
-            elif(self.currentPlayer.isSoft):
-                if (row > 19):
-                    row = 19
-                if (row < 13):
-                    row = 13
-                for x in self.stratSoft:
-                    if(x[0] == str(row)):
-                        if(self.verbose == 2):
-                            print("Soft: " + str(row) + " " + str(column) + " " + str(x[self.stratSoft[0].index(column)]))
-                        self.do(x[self.stratSoft[0].index(column)])
-                        break
+        while(not self.currentPlayer.isDone):
+            if(len(self.currentPlayer.hand) < 5 and self.currentPlayer.value < 21):
+                if(self.currentPlayer.canSplit() and self.currentPlayer.canSplit() not in [5, 10, "J", "Q", "K"]):
+                    self.do(self.playSplit())
+                elif(self.currentPlayer.isSoft):
+                    self.do(self.playSoft())
+                else:
+                    self.do(self.playHard())
             else:
-                if (row > 17):
-                    row = 17
-                if (row < 8):
-                    row = 8
-                for x in self.stratHard:
-                    if(x[0] == str(row)):
-                        if(self.verbose == 2):
-                            print("Hard: " + str(row) + " " + str(column) + " " + str(x[self.stratSoft[0].index(column)]))
-                        self.do(x[self.stratHard[0].index(column)])
-                        break
-        else:
-            self.stand()
+                self.stand()
+        self.nextPlayer()
     
     def do(self, action):
         if action == 'H':
@@ -147,6 +153,7 @@ class Table:
         elif action == 'P':
             self.split()
         else:
+            print("errored")
             exit()
 
     def dealerPlay(self):
