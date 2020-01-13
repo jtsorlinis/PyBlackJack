@@ -77,7 +77,10 @@ class Table:
 
     def stand(self):
         if (self.verbose):
-            print("Player " + str(self.currentPlayer.playerNum) + " stands")
+            if (self.currentPlayer.value > 21):
+                print("Player " + str(self.currentPlayer.playerNum) + " busts\n")
+            else:
+                print("Player " + str(self.currentPlayer.playerNum) + " stands\n")
         self.currentPlayer.isDone = True
 
     def split(self):
@@ -97,6 +100,7 @@ class Table:
             if(self.verbose == 1):
                 print("Player " + str(self.currentPlayer.playerNum) + " doubles")
         self.hit()
+        self.stand()
 
     def playHard(self):
         tempval = self.currentPlayer.value
@@ -155,6 +159,8 @@ class Table:
             print("errored")
             print(action)
             exit()
+        if(self.verbose):
+            self.print()
 
     def dealerPlay(self):
         allBusted = True
