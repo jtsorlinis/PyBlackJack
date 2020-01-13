@@ -46,14 +46,14 @@ class Player:
             self.splitFrom.win(table, mult)
         else:
             self.earnings += (table.betsize * self.betMult * mult)
-        table.casinoEarnings -= (table.betsize * self.betMult * mult)
+            table.casinoEarnings -= (table.betsize * self.betMult * mult)
 
     def lose(self, table):
         if(self.splitFrom):
             self.splitFrom.lose(table)
         else:
             self.earnings -= (table.betsize * self.betMult)
-        table.casinoEarnings += (table.betsize * self.betMult)
+            table.casinoEarnings += (table.betsize * self.betMult)
 
     def print(self):
         output = "Player " + str(self.playerNum) + ": "

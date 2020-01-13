@@ -4,12 +4,13 @@ from cardpile import CardPile
 import utils
 
 class Table:
-    def __init__(self, numplayers, numofdecks, betsize, verbose=False):
+    def __init__(self, numplayers, numofdecks, betsize, mincards, verbose=False):
         self.verbose = verbose
         self.betsize = betsize
         self.players = []
         self.numofdecks = numofdecks
         self.cardpile = CardPile(numofdecks)
+        self.mincards = mincards
         for _ in range (0, numplayers):
             self.players.append(Player())
         self.dealer = Dealer()
@@ -37,7 +38,7 @@ class Table:
         self.clear()
         if(self.verbose):
             print(str(len(self.cardpile.cards)) + " cards left")
-        self.getNewCards(60)
+        self.getNewCards()
         self.dealRound()
         self.dealDealer()
         self.dealRound()
@@ -52,12 +53,12 @@ class Table:
             self.autoPlay()
             
 
-    def getNewCards(self, mincards):
-        if(len(self.cardpile.cards) < 60):
+    def getNewCards(self):
+        if(len(self.cardpile.cards) < self.mincards):
             self.cardpile = CardPile(self.numofdecks)
             self.cardpile.shuffle()
             if(self.verbose):
-                print("Got " + str(self.numofdecks) + " new decks as number of cards is below " + str(mincards))
+                print("Got " + str(self.numofdecks) + " new decks as number of cards is below " + str(self.mincards))
 
     def clear(self):
         for player in self.players:
@@ -128,7 +129,7 @@ class Table:
                 return x[self.stratSplits[0].index(str(self.dealer.upCard()))]
 
     def autoPlay(self):
-        # temp strategy
+        # # temp strategy
         # while(len(self.currentPlayer.hand) < 5 and self.currentPlayer.value < 17):
         #     self.hit()
 
@@ -213,6 +214,14 @@ class Table:
             return True
         else:
             return False
+
+    def checkEarnings(self):
+        check = 0
+        for player in self.players:
+            check += player.earnings
+        if (check*-1 != self.casinoEarnings):
+            print("NO MATCH")
+            exit()
 
     def finishRound(self):
         if(self.verbose):

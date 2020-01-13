@@ -9,14 +9,15 @@ import sys
 players = 5
 decks = 8
 betsize = 10
+mincards = 40
 
-rounds = 1000
-verbose = 1
+rounds = 10000
+verbose = 0
 
 if(verbose):
     sys.stdout = open('output.txt', 'w')
 
-table1 = Table(players,decks,betsize,verbose)
+table1 = Table(players,decks,betsize, mincards,verbose)
 table1.cardpile.shuffle()
 
 x=0
@@ -25,6 +26,7 @@ while(x<rounds):
     if(verbose):
         print("Round " + str(x))
     table1.startRound()
+    # table1.checkEarnings()
     x+=1
 
 for player in table1.players:
