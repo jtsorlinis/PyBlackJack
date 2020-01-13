@@ -15,7 +15,7 @@ mincards = 40
 rounds = 100000
 verbose = 0
 
-if(verbose):
+if(verbose and rounds > 100):
     sys.stdout = open('output.txt', 'w')
 
 table1 = Table(players,decks,betsize, mincards,verbose)
@@ -28,7 +28,7 @@ while(x<rounds):
         print("Round " + str(x))
     # random.shuffle(table1.players)
     table1.startRound()
-    # table1.checkEarnings()
+    table1.checkEarnings()
     x+=1
 
 for player in table1.players:

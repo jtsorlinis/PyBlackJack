@@ -4,7 +4,6 @@ class Dealer(Player):
     def __init__(self):
         self.hand = []
         self.playerNum = "D"
-        self.hideSecond = True
         self.value = 0
         self.hasAce = False
         self.isSoft = False
@@ -19,16 +18,14 @@ class Dealer(Player):
         return self.hand[0].evaluate()
 
     def print(self):
+        x = 0
         output = "Player " + str(self.playerNum) + ": "
-        if self.hideSecond and len(self.hand) == 2:
-            output += self.hand[0].print()
-            output += ' X'
-        else:
-            for card in self.hand:
-                output += card.print() + " "
-            output += "\tScore: "
-            if self.value < 22:
-                output += str(self.value)
-            else:
-                output += "Bust (" + str(self.value) + ")"
+        for card in self.hand:
+            output += card.print() + " "
+            x+=1
+        for space in range(x,5):
+            output += "  "
+        output += "\tScore: " + str(self.value)
+        if self.value > 21:
+            output += " (Bust)"
         return output
