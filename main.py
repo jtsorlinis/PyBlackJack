@@ -12,8 +12,8 @@ decks = 8
 betsize = 10
 mincards = 40
 
-rounds = 10000
-verbose = 1
+rounds = 100000
+verbose = 0
 
 if(verbose):
     sys.stdout = open('output.txt', 'w')
@@ -33,8 +33,7 @@ while(x<rounds):
 
 for player in table1.players:
     if(not player.splitFrom):
-        print("Player " + str(player.playerNum) + " earnings: " + str(player.earnings) + "\t\tWin percentage: " + str(50+(player.earnings/rounds*5)))
-
+        print("Player " + str(player.playerNum) + " earnings: " + str(player.earnings) + "\t\tWin percentage: " + str(50+(player.earnings/(rounds*betsize)*50)))
 print("Casino earnings: " + str(table1.casinoEarnings))
 
 end = time.perf_counter()
