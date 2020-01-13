@@ -1,5 +1,6 @@
 class Player:
     playerNumCount = 0
+    maxSplits = 10
 
     def __init__(self,split=None):
         self.hand = []
@@ -7,7 +8,7 @@ class Player:
         self.earnings = 0
         self.aces = 0
         self.isSoft = False
-        self.isSplit = False
+        self.splitCount = 0
         self.isDone = False
         self.splitFrom = split
         self.betMult = 1
@@ -15,8 +16,8 @@ class Player:
 
         if(split):
             self.hand = [split.hand[1]]
+            self.splitCount = split.splitCount + 1
             self.playerNum = str(split.playerNum) + "S"
-            self.isSplit = True
         else:
             Player.playerNumCount += 1
             self.playerNum = Player.playerNumCount
@@ -29,20 +30,20 @@ class Player:
         self.value = 0
         self.aces = 0
         self.isSoft = False
-        self.isSplit = False
+        self.splitCount = 0
         self.isDone = False
         self.betMult = 1
         self.hasNatural = 0
 
     def canSplit(self):
-        if(len(self.hand) == 2 and (self.hand[0].rank == self.hand[1].rank) and self.isSplit == False):
+        if(len(self.hand) == 2 and (self.hand[0].rank == self.hand[1].rank) and self.splitCount < Player.maxSplits):
             return self.hand[0].rank
         else:
             return False
 
     def win(self, table, mult=1):
         if(self.splitFrom):
-            self.splitFrom.earnings += (table.betsize * self.betMult * mult)
+            self.splitFrom.win(table, mult=1)
         else:
             self.earnings += (table.betsize * self.betMult * mult)
         table.casinoEarnings -= (table.betsize * self.betMult * mult)

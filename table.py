@@ -82,13 +82,12 @@ class Table:
         splitPlayer = Player(self.currentPlayer)
         self.players.insert(self.players.index(self.currentPlayer)+1, splitPlayer)
         self.currentPlayer.hand.pop()
-        self.currentPlayer.isSplit = True
         self.currentPlayer.evaluate()
         splitPlayer.evaluate()
         if(self.verbose):
             print("Player " + str(self.currentPlayer.playerNum) + " splits")
             self.print()
-        self.hit()
+        
     
     def double(self):
         if (self.currentPlayer.betMult == 1):
@@ -99,22 +98,14 @@ class Table:
 
     def playHard(self):
         tempval = self.currentPlayer.value
-        if (tempval > 17):
-            tempval = 17
-        if (tempval < 8):
-            tempval = 8
         for x in self.stratHard:
             if(x[0] == str(tempval)):
                 if(self.verbose == 2):
                     print("Soft: " + str(tempval) + " " + str(self.dealer.upCard()) + " " + str(x[self.stratSoft[0].index(str(self.dealer.upCard()))]))
-                return x[self.stratSoft[0].index(str(self.dealer.upCard()))]
+                return x[self.stratHard[0].index(str(self.dealer.upCard()))]
 
     def playSoft(self):
         tempval = self.currentPlayer.value
-        if (tempval > 19):
-            tempval = 19
-        if (tempval < 13):
-            tempval = 13
         for x in self.stratSoft:
             if(x[0] == str(tempval)):
                 if(self.verbose == 2):
@@ -129,9 +120,15 @@ class Table:
                 return x[self.stratSplits[0].index(str(self.dealer.upCard()))]
 
     def autoPlay(self):
+        # temp strategy
         # while(len(self.currentPlayer.hand) < 5 and self.currentPlayer.value < 17):
         #     self.hit()
+
+        # Actual strategy
         while(not self.currentPlayer.isDone):
+            if(len(self.currentPlayer.hand) == 1):
+                self.hit()
+
             if(len(self.currentPlayer.hand) < 5 and self.currentPlayer.value < 21):
                 if(self.currentPlayer.canSplit() and self.currentPlayer.canSplit() not in [5, 10, "J", "Q", "K"]):
                     self.do(self.playSplit())
@@ -154,6 +151,7 @@ class Table:
             self.split()
         else:
             print("errored")
+            print(action)
             exit()
 
     def dealerPlay(self):
