@@ -70,12 +70,14 @@ class Table:
         self.currentPlayer.hand.append(card)
 
     def hit(self):
-        if(self.verbose):
+        if(self.verbose == 1):
             print("Player " + str(self.currentPlayer.playerNum) + " hits")
         self.deal()
         self.currentPlayer.evaluate()
 
     def stand(self):
+        if (self.verbose):
+            print("Player " + str(self.currentPlayer.playerNum) + " stands")
         self.currentPlayer.isDone = True
 
     def split(self):
@@ -84,7 +86,7 @@ class Table:
         self.currentPlayer.hand.pop()
         self.currentPlayer.evaluate()
         splitPlayer.evaluate()
-        if(self.verbose):
+        if(self.verbose == 1):
             print("Player " + str(self.currentPlayer.playerNum) + " splits")
             self.print()
         
@@ -92,7 +94,7 @@ class Table:
     def double(self):
         if (self.currentPlayer.betMult == 1):
             self.currentPlayer.double()
-            if(self.verbose):
+            if(self.verbose == 1):
                 print("Player " + str(self.currentPlayer.playerNum) + " doubles")
         self.hit()
 
@@ -101,7 +103,7 @@ class Table:
         for x in self.stratHard:
             if(x[0] == str(tempval)):
                 if(self.verbose == 2):
-                    print("Soft: " + str(tempval) + " " + str(self.dealer.upCard()) + " " + str(x[self.stratSoft[0].index(str(self.dealer.upCard()))]))
+                    print("Strategy: Hard\tPlayer " + str(self.currentPlayer.playerNum) + " has: " + str(tempval) + "\tDealer has: " + str(self.dealer.upCard()) + "\tAction: " + str(x[self.stratHard[0].index(str(self.dealer.upCard()))]))
                 return x[self.stratHard[0].index(str(self.dealer.upCard()))]
 
     def playSoft(self):
@@ -109,14 +111,14 @@ class Table:
         for x in self.stratSoft:
             if(x[0] == str(tempval)):
                 if(self.verbose == 2):
-                    print("Soft: " + str(tempval) + " " + str(self.dealer.upCard()) + " " + str(x[self.stratSoft[0].index(str(self.dealer.upCard()))]))
+                    print("Strategy: Soft\tPlayer " + str(self.currentPlayer.playerNum) + " has: " + str(tempval) + "\tDealer has: " + str(self.dealer.upCard()) + "\tAction: " + str(x[self.stratSoft[0].index(str(self.dealer.upCard()))]))
                 return x[self.stratSoft[0].index(str(self.dealer.upCard()))]
 
     def playSplit(self):
         for x in self.stratSplits:
             if(x[0] == str(self.currentPlayer.canSplit())):
                 if(self.verbose == 2):
-                    print("Split: " + str(self.currentPlayer.canSplit()) + " " + str(self.dealer.upCard()) + " " + str(x[self.stratSoft[0].index(self.dealer.upCard())]))
+                    print("Strategy: Split\tPlayer " + str(self.currentPlayer.playerNum) + " has pair of: " + str(self.currentPlayer.canSplit()) + "\tDealer has: " + str(self.dealer.upCard()) + "\tAction: " + str(x[self.stratSplits[0].index(str(self.dealer.upCard()))]))
                 return x[self.stratSplits[0].index(str(self.dealer.upCard()))]
 
     def autoPlay(self):
