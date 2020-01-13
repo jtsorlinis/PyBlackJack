@@ -5,6 +5,7 @@ from table import Table
 from cardpile import CardPile
 import time
 import sys
+import random
 
 players = 5
 decks = 8
@@ -25,6 +26,7 @@ start = time.perf_counter()
 while(x<rounds):
     if(verbose):
         print("Round " + str(x))
+    # random.shuffle(table1.players)
     table1.startRound()
     # table1.checkEarnings()
     x+=1
