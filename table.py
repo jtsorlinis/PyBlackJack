@@ -64,8 +64,8 @@ class Table:
         for player in self.players:
             if (player.splitFrom):
                 self.players.remove(player)
-            else:
-                player.resetHand()
+        for player in self.players:
+            player.resetHand()
         self.dealer.resetHand()
 
     def deal(self):
