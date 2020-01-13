@@ -6,13 +6,17 @@ from cardpile import CardPile
 import time
 import sys
 
+players = 5
+decks = 8
+betsize = 10
+
 rounds = 100000
 verbose = 0
 
 if(verbose):
     sys.stdout = open('output.txt', 'w')
 
-table1 = Table(5,8,10,verbose)
+table1 = Table(players,decks,betsize,verbose)
 table1.cardpile.shuffle()
 
 x=0
