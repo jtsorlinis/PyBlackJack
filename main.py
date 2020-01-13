@@ -10,8 +10,8 @@ players = 5
 decks = 8
 betsize = 10
 
-rounds = 100000
-verbose = 0
+rounds = 1000
+verbose = 1
 
 if(verbose):
     sys.stdout = open('output.txt', 'w')

@@ -221,26 +221,26 @@ class Table:
             if player.hasNatural:
                 player.win(self, 1.5)
                 if(self.verbose):  
-                    print("Player " + str(player.playerNum) + " wins with a natural 21")
+                    print("Player " + str(player.playerNum) + " wins x" + str(1.5*player.betMult) + " with a natural 21")
             elif player.value > 21:
                 player.lose(self)
                 if(self.verbose):
-                    print("Player " + str(player.playerNum) + " Busts")
+                    print("Player " + str(player.playerNum) + " Busts x" + str(player.betMult))
             elif self.dealer.value > 21:
                 player.win(self)
                 if(self.verbose):
-                    print("Player " + str(player.playerNum) + " Wins")
+                    print("Player " + str(player.playerNum) + " Wins x" + str(player.betMult))
             elif player.value > self.dealer.value:
                 player.win(self)
                 if(self.verbose):
-                    print("Player " + str(player.playerNum) + " Wins")
+                    print("Player " + str(player.playerNum) + " Wins x" + str(player.betMult))
             elif player.value == self.dealer.value:
                 if(self.verbose):
                     print("Player " + str(player.playerNum) + " Draws")
             else:
                 player.lose(self)
                 if(self.verbose):
-                    print("Player " + str(player.playerNum) + " Loses")
+                    print("Player " + str(player.playerNum) + " Loses x" + str(player.betMult))
         for player in self.players:
             if(not player.splitFrom):
                 if(self.verbose):
