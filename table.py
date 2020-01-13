@@ -49,6 +49,8 @@ class Table:
             self.checkPlayerNatural()
             if(self.verbose):
                 self.print()
+            self.autoPlay()
+            
 
     def getNewCards(self, mincards):
         if(len(self.cardpile.cards) < 60):
@@ -77,10 +79,8 @@ class Table:
 
     def stand(self):
         if (self.verbose):
-            if (self.currentPlayer.value > 21):
-                print("Player " + str(self.currentPlayer.playerNum) + " busts\n")
-            else:
-                print("Player " + str(self.currentPlayer.playerNum) + " stands\n")
+            if (self.currentPlayer.value <= 21):
+                print("Player " + str(self.currentPlayer.playerNum) + " stands")
         self.currentPlayer.isDone = True
 
     def split(self):
@@ -95,12 +95,14 @@ class Table:
         
     
     def double(self):
-        if (self.currentPlayer.betMult == 1):
+        if (self.currentPlayer.betMult == 1 and len(self.currentPlayer.hand) == 2):
             self.currentPlayer.double()
             if(self.verbose == 1):
                 print("Player " + str(self.currentPlayer.playerNum) + " doubles")
-        self.hit()
-        self.stand()
+            self.hit()
+            self.stand()
+        else:
+            self.hit()
 
     def playHard(self):
         tempval = self.currentPlayer.value
@@ -133,7 +135,10 @@ class Table:
         # Actual strategy
         while(not self.currentPlayer.isDone):
             if(len(self.currentPlayer.hand) == 1):
-                self.hit()
+                if(self.verbose == 1):
+                    print("Player " + str(self.currentPlayer.playerNum) + " gets 2nd card after splitting")
+                self.deal()
+                self.currentPlayer.evaluate()
 
             if(len(self.currentPlayer.hand) < 5 and self.currentPlayer.value < 21):
                 if(self.currentPlayer.canSplit() and self.currentPlayer.canSplit() not in [5, 10, "J", "Q", "K"]):
@@ -170,6 +175,7 @@ class Table:
         self.dealer.hideSecond = False
         self.dealer.evaluate()
         if(self.verbose):
+            print("Dealer's turn")
             self.print()
         if(allBusted):
             if(self.verbose):

@@ -4,9 +4,13 @@ from player import Player
 from table import Table
 from cardpile import CardPile
 import time
+import sys
 
-rounds = 100
-verbose = 2
+rounds = 100000
+verbose = 0
+
+if(verbose):
+    sys.stdout = open('output.txt', 'w')
 
 table1 = Table(5,8,10,verbose)
 table1.cardpile.shuffle()
@@ -17,7 +21,6 @@ while(x<rounds):
     if(verbose):
         print("Round " + str(x))
     table1.startRound()
-    table1.autoPlay()
     x+=1
 
 for player in table1.players:
