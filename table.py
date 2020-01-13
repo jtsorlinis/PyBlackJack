@@ -93,7 +93,22 @@ class Table:
         if(self.verbose == 1):
             print("Player " + str(self.currentPlayer.playerNum) + " splits")
             self.print()
-        
+    
+    def splitAces(self):
+        if(self.verbose == 1):
+            print("Player " + str(self.currentPlayer.playerNum) + " splits aces")
+        splitPlayer = Player(self.currentPlayer)
+        self.players.insert(self.players.index(self.currentPlayer)+1, splitPlayer)
+        self.currentPlayer.hand.pop()
+        self.deal()
+        self.currentPlayer.evaluate()
+        self.stand()
+        self.currentPlayer = splitPlayer
+        self.deal()
+        self.currentPlayer.evaluate()
+        self.stand()
+        if(self.verbose == 1):
+            self.print()
     
     def double(self):
         if (self.currentPlayer.betMult == 1 and len(self.currentPlayer.hand) == 2):
@@ -120,7 +135,7 @@ class Table:
                 if(self.verbose == 2):
                     print("Strategy: Soft\tPlayer " + str(self.currentPlayer.playerNum) + " has: " + str(tempval) + "\tDealer has: " + str(self.dealer.upCard()) + "\tAction: " + str(x[self.stratSoft[0].index(str(self.dealer.upCard()))]))
                 return x[self.stratSoft[0].index(str(self.dealer.upCard()))]
-
+        
     def playSplit(self):
         for x in self.stratSplits:
             if(x[0] == str(self.currentPlayer.canSplit())):
@@ -142,7 +157,9 @@ class Table:
                 self.currentPlayer.evaluate()
 
             if(len(self.currentPlayer.hand) < 5 and self.currentPlayer.value < 21):
-                if(self.currentPlayer.canSplit() and self.currentPlayer.canSplit() not in [5, 10, "J", "Q", "K"]):
+                if(self.currentPlayer.canSplit() == 'A'):
+                    self.splitAces()
+                elif(self.currentPlayer.canSplit() and self.currentPlayer.canSplit() not in [5, 10, "J", "Q", "K"]):
                     self.do(self.playSplit())
                 elif(self.currentPlayer.isSoft):
                     self.do(self.playSoft())
@@ -202,7 +219,7 @@ class Table:
 
     def checkPlayerNatural(self):
         for player in self.players:
-            if(player.value == 21):
+            if(player.value == 21 and len(player.hand) == 2 and not player.splitFrom):
                 player.hasNatural = 1
 
     def checkDealerNatural(self):

@@ -12,7 +12,7 @@ betsize = 10
 mincards = 40
 
 rounds = 10000
-verbose = 0
+verbose = 1
 
 if(verbose):
     sys.stdout = open('output.txt', 'w')
