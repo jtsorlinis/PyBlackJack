@@ -26,13 +26,12 @@ class Table:
         for player in self.players:
             self.currentPlayer = player
             self.deal()
-    
-    def postDeal(self):
-        self.currentPlayer = self.players[0]
-        for player in self.players:
             player.evaluate()
+
+    def preDeal(self):
+        for player in self.players:
             self.selectBet(player)
-                   
+              
     # check count and bet accordingly
     def selectBet(self, player):
         if(int(self.trueCount) >= 2):
@@ -47,11 +46,12 @@ class Table:
         if(self.verbose):
             print(str(len(self.cardpile.cards)) + " cards left")
         self.getNewCards()
+        self.preDeal()
         self.dealRound()
         self.dealDealer()
         self.dealRound()
         self.dealDealer(True)
-        self.postDeal()
+        self.currentPlayer = self.players[0]  
         if(self.verbose):
             print("Running count is: " + str(self.runningCount) +"\tTrue count is: " + str(int(self.trueCount)))
         if(self.checkDealerNatural()):
