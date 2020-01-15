@@ -35,7 +35,7 @@ class Table:
     # check count and bet accordingly
     def selectBet(self, player):
         if(int(self.trueCount) >= 2):
-                player.initialBet = self.betsize * (int(self.trueCount-1))
+                player.initialBet = self.betsize * (int(self.trueCount-1) * 1.25)
 
     def dealDealer(self,faceDown=False):
         self.currentPlayer = self.dealer
