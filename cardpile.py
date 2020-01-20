@@ -7,9 +7,6 @@ class CardPile:
         for _ in range(0,numofdecks):
             self.cards += Deck().cards
 
-    def getSize(self):
-        return len(self.cards)
-
     def print(self):
         string = ""
         for card in self.cards:
