@@ -26,7 +26,8 @@ start = time.perf_counter()
 while(x<rounds):
     if(verbose):
         print("Round " + str(x))
-    # random.shuffle(table1.players)
+    if(not verbose and rounds>1000 and x % (rounds/100) == 0):
+        print("\tProgress: " + str(int(x/rounds*100)),end="%\r")
     table1.startRound()
     table1.checkEarnings()
     x+=1
