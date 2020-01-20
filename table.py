@@ -73,11 +73,10 @@ class Table:
                 print("Got " + str(self.numofdecks) + " new decks as number of cards is below " + str(self.mincards))
 
     def clear(self):
-        for player in self.players:
-            if (player.splitFrom):
-                self.players.remove(player)
-        for player in self.players:
+        for player in self.players[:]:
             player.resetHand()
+            if (player.splitFrom):
+                self.players.remove(player)     
         self.dealer.resetHand()
 
     def deal(self, faceDown=False):
