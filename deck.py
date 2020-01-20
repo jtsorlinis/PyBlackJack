@@ -18,8 +18,5 @@ class Deck:
             string += str(card.print() + "\n")
         return string
 
-    def getCards(self):
-        return self.cards
-
     def shuffle(self):
         random.shuffle(self.cards)

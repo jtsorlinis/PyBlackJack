@@ -12,7 +12,7 @@ decks = 8
 betsize = 10
 mincards = 40
 
-rounds = 100000
+rounds = 10000
 verbose = 0
 
 if(verbose and rounds > 100):
