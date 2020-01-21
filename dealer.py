@@ -23,7 +23,7 @@ class Dealer(Player):
         for card in self.hand:
             output += card.print() + " "
             x+=1
-        for space in range(x,5):
+        for _ in range(x,5):
             output += "  "
         output += "\tScore: " + str(self.value)
         if self.value > 21:
