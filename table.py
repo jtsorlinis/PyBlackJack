@@ -82,7 +82,8 @@ class Table:
         card = self.cardpile.cards.pop()
         self.currentPlayer.hand.append(card)
         card.faceDown = faceDown
-        self.updateCount(card)
+        if(not faceDown):
+            self.updateCount(card)
     
     def updateCount(self, card):
         self.runningCount += card.count()
