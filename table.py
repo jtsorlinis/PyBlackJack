@@ -285,11 +285,10 @@ class Table:
                 player.lose()
                 if(self.verbose):
                     print("Player " + str(player.playerNum) + " Loses " + str(player.betMult*player.initialBet))
-        for player in self.players:
-            if(not player.splitFrom):
-                if(self.verbose):
-                    print("Player " + str(player.playerNum) + " Earnings: " + str(player.earnings))
         if(self.verbose):
+            for player in self.players:
+                if(not player.splitFrom):
+                    print("Player " + str(player.playerNum) + " Earnings: " + str(player.earnings))
             print("\n")
 
     def print(self):
