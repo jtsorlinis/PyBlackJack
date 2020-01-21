@@ -45,6 +45,7 @@ class Table:
         self.clear()
         if(self.verbose):
             print(str(len(self.cardpile.cards)) + " cards left")
+            print("Running count is: " + str(self.runningCount) +"\tTrue count is: " + str(int(self.trueCount)))
         self.getNewCards()
         self.preDeal()
         self.dealRound()
@@ -52,8 +53,6 @@ class Table:
         self.dealRound()
         self.dealDealer(True)
         self.currentPlayer = self.players[0]  
-        if(self.verbose):
-            print("Running count is: " + str(self.runningCount) +"\tTrue count is: " + str(int(self.trueCount)))
         if(self.checkDealerNatural()):
             self.finishRound()
         else:
