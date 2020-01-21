@@ -5,13 +5,10 @@ class Dealer(Player):
         self.hand = []
         self.playerNum = "D"
         self.value = 0
-        self.hasAce = False
-        self.isSoft = False
 
     def resetHand(self):
         self.hand = []
         self.value = 0
-        self.hasAce = False
         self.hideSecond = True
 
     def upCard(self):
