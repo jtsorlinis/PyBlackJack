@@ -18,12 +18,10 @@ class Dealer(Player):
         return self.hand[0].evaluate()
 
     def print(self):
-        x = 0
         output = "Player " + str(self.playerNum) + ": "
         for card in self.hand:
             output += card.print() + " "
-            x+=1
-        for _ in range(x,5):
+        for _ in range(len(self.hand),5):
             output += "  "
         output += "\tScore: " + str(self.value)
         if self.value > 21:
