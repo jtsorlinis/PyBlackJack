@@ -70,7 +70,8 @@ class Player:
             output += " (Bust)"
         else:
             output += "       "
-        output += "\tBet: " + str(self.initialBet*self.betMult)
+        if(self.playerNum != "D"):
+            output += "\tBet: " + str(self.initialBet*self.betMult)
         return output
 
     def evaluate(self):
