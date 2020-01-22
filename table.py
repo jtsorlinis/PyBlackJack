@@ -18,9 +18,9 @@ class Table:
         self.casinoEarnings = 0
         self.runningCount = 0
         self.trueCount = 0
-        self.stratHard = utils.readArray('strategyHard.txt')
-        self.stratSoft = utils.readArray('strategySoft.txt')
-        self.stratSplits = utils.readArray('strategySplits.txt')
+        self.stratHard = utils.fileToDict('strategyHard.txt')
+        self.stratSoft = utils.fileToDict('strategySoft.txt')
+        self.stratSplits = utils.fileToDict('strategySplits.txt')
 
     def dealRound(self):
         for player in self.players:
@@ -177,11 +177,11 @@ class Table:
                 if(self.currentPlayer.canSplit() == 'A'):
                     self.splitAces()
                 elif(self.currentPlayer.canSplit() and self.currentPlayer.canSplit() not in [5, 10, "J", "Q", "K"]):
-                    self.do(self.playSplit())
+                    self.do(utils.getAction(self.currentPlayer.canSplit(),self.dealer.upCard(),self.stratSplits))
                 elif(self.currentPlayer.isSoft):
-                    self.do(self.playSoft())
+                    self.do(utils.getAction(self.currentPlayer.value,self.dealer.upCard(),self.stratSoft))
                 else:
-                    self.do(self.playHard())
+                    self.do(utils.getAction(self.currentPlayer.value,self.dealer.upCard(),self.stratHard))
             else:
                 self.stand()
         self.nextPlayer()
