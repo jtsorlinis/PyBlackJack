@@ -78,7 +78,7 @@ class Player:
         self.aces = 0
         self.value = 0
         for card in self.hand:
-            self.value += card.evaluate()
+            self.value += card.value
             # Check for an ace
             if card.rank == 'A':
                 self.aces += 1

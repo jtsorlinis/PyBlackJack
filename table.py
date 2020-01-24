@@ -86,7 +86,7 @@ class Table:
             self.updateCount(card)
     
     def updateCount(self, card):
-        self.runningCount += card.count()
+        self.runningCount += card.count
         self.trueCount = self.runningCount/(len(self.cardpile.cards)/52)
         # print(self.runningCount)
 

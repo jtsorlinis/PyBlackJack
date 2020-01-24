@@ -5,6 +5,8 @@ class Card:
         self.rank = rank
         self.suit = suit
         self.faceDown = False
+        self.value = self.evaluate()
+        self.count = self.count()
 
     def print(self):
         if (self.faceDown):
@@ -25,9 +27,6 @@ class Card:
             return -1
         elif self.rank in [7,8,9]:
             return 0
-        elif self.rank in [2,3,4,5,6]:
-            return 1
         else:
-            print("erored with " + str(self.rank))
-            exit()
+            return 1
         
