@@ -14,7 +14,7 @@ class Table:
         for _ in range (0, numplayers):
             self.players.append(Player(self))
         self.dealer = Dealer()
-        self.currentPlayer = None
+        self.currentPlayer = 0
         self.casinoEarnings = 0
         self.runningCount = 0
         self.trueCount = 0
@@ -24,9 +24,10 @@ class Table:
 
     def dealRound(self):
         for player in self.players:
-            self.currentPlayer = player
             self.deal()
             player.evaluate()
+            self.currentPlayer+=1
+        self.currentPlayer = 0
 
     def preDeal(self):
         for player in self.players:
@@ -38,11 +39,15 @@ class Table:
                 player.initialBet = self.betsize * (int(self.trueCount-1) * 1.25)
 
     def dealDealer(self,faceDown=False):
-        self.currentPlayer = self.dealer
-        self.deal(faceDown)
+        card = self.cardpile.cards.pop()
+        card.faceDown = faceDown
+        self.dealer.hand.append(card)
+        if(not faceDown):
+            self.runningCount += card.count
 
     def startRound(self):
         self.clear()
+        self.updateCount()
         if(self.verbose):
             print(str(len(self.cardpile.cards)) + " cards left")
             print("Running count is: " + str(self.runningCount) +"\tTrue count is: " + str(int(self.trueCount)))
@@ -52,7 +57,7 @@ class Table:
         self.dealDealer()
         self.dealRound()
         self.dealDealer(True)
-        self.currentPlayer = self.players[0]  
+        self.currentPlayer = 0
         if(self.checkDealerNatural()):
             self.finishRound()
         else:
@@ -64,7 +69,7 @@ class Table:
 
     def getNewCards(self):
         if(len(self.cardpile.cards) < self.mincards):
-            self.cardpile = CardPile(self.numofdecks)
+            self.cardpile.refresh()
             self.cardpile.shuffle()
             self.trueCount = 0
             self.runningCount = 0
@@ -77,111 +82,90 @@ class Table:
             if (player.splitFrom):
                 self.players.remove(player)     
         self.dealer.resetHand()
+        self.currentPlayer = 0
 
-    def deal(self, faceDown=False):
+    def deal(self):
         card = self.cardpile.cards.pop()
-        self.currentPlayer.hand.append(card)
-        card.faceDown = faceDown
-        if(not faceDown):
-            self.updateCount(card)
-    
-    def updateCount(self, card):
+        self.players[self.currentPlayer].hand.append(card)
         self.runningCount += card.count
+        
+    def updateCount(self):
         self.trueCount = self.runningCount/(len(self.cardpile.cards)/52)
         # print(self.runningCount)
 
     def hit(self):
         if(self.verbose == 1):
-            print("Player " + str(self.currentPlayer.playerNum) + " hits")
+            print("Player " + str(self.players[self.currentPlayer].playerNum) + " hits")
         self.deal()
-        self.currentPlayer.evaluate()
+        self.players[self.currentPlayer].evaluate()
 
     def stand(self):
         if (self.verbose):
-            if (self.currentPlayer.value <= 21):
-                print("Player " + str(self.currentPlayer.playerNum) + " stands")
-        self.currentPlayer.isDone = True
+            if (self.players[self.currentPlayer].value <= 21):
+                print("Player " + str(self.players[self.currentPlayer].playerNum) + " stands")
+        self.players[self.currentPlayer].isDone = True
 
     def split(self):
-        splitPlayer = Player(self,self.currentPlayer)
-        self.players.insert(self.players.index(self.currentPlayer)+1, splitPlayer)
-        self.currentPlayer.hand.pop()
-        self.currentPlayer.evaluate()
-        splitPlayer.evaluate()
+        splitPlayer = Player(self,self.players[self.currentPlayer])
+        self.players[self.currentPlayer].hand.pop()
+        self.players.insert(self.currentPlayer+1, splitPlayer)
+        self.players[self.currentPlayer].evaluate()
+        self.players[self.currentPlayer+1].evaluate()
         if(self.verbose == 1):
-            print("Player " + str(self.currentPlayer.playerNum) + " splits")
+            print("Player " + str(self.players[self.currentPlayer].playerNum) + " splits")
     
     def splitAces(self):
         if(self.verbose == 1):
-            print("Player " + str(self.currentPlayer.playerNum) + " splits aces")
-        splitPlayer = Player(self,self.currentPlayer)
-        self.players.insert(self.players.index(self.currentPlayer)+1, splitPlayer)
-        self.currentPlayer.hand.pop()
+            print("Player " + str(self.players[self.currentPlayer].playerNum) + " splits aces")
+        splitPlayer = Player(self,self.players[self.currentPlayer])
+        self.players[self.currentPlayer].hand.pop()
+        self.players.insert(self.currentPlayer+1, splitPlayer)
         self.deal()
-        self.currentPlayer.evaluate()
+        self.players[self.currentPlayer].evaluate()
         self.stand()
-        self.currentPlayer = splitPlayer
+        self.currentPlayer+=1
         self.deal()
-        self.currentPlayer.evaluate()
+        self.players[self.currentPlayer].evaluate()
         self.stand()
         if(self.verbose == 1):
             self.print()
     
     def double(self):
-        if (self.currentPlayer.betMult == 1 and len(self.currentPlayer.hand) == 2):
-            self.currentPlayer.double()
+        if (self.players[self.currentPlayer].betMult == 1 and len(self.players[self.currentPlayer].hand) == 2):
+            self.players[self.currentPlayer].double()
             if(self.verbose == 1):
-                print("Player " + str(self.currentPlayer.playerNum) + " doubles")
+                print("Player " + str(self.players[self.currentPlayer].playerNum) + " doubles")
             self.hit()
             self.stand()
         else:
             self.hit()
 
-    def playHard(self):
-        tempval = self.currentPlayer.value
-        for x in self.stratHard:
-            if(x[0] == str(tempval)):
-                if(self.verbose == 2):
-                    print("Strategy: Hard\tPlayer " + str(self.currentPlayer.playerNum) + " has: " + str(tempval) + "\tDealer has: " + str(self.dealer.upCard()) + "\tAction: " + str(x[self.stratHard[0].index(str(self.dealer.upCard()))]))
-                return x[self.stratHard[0].index(str(self.dealer.upCard()))]
-
-    def playSoft(self):
-        tempval = self.currentPlayer.value
-        for x in self.stratSoft:
-            if(x[0] == str(tempval)):
-                if(self.verbose == 2):
-                    print("Strategy: Soft\tPlayer " + str(self.currentPlayer.playerNum) + " has: " + str(tempval) + "\tDealer has: " + str(self.dealer.upCard()) + "\tAction: " + str(x[self.stratSoft[0].index(str(self.dealer.upCard()))]))
-                return x[self.stratSoft[0].index(str(self.dealer.upCard()))]
-        
-    def playSplit(self):
-        for x in self.stratSplits:
-            if(x[0] == str(self.currentPlayer.canSplit())):
-                if(self.verbose == 2):
-                    print("Strategy: Split\tPlayer " + str(self.currentPlayer.playerNum) + " has pair of: " + str(self.currentPlayer.canSplit()) + "\tDealer has: " + str(self.dealer.upCard()) + "\tAction: " + str(x[self.stratSplits[0].index(str(self.dealer.upCard()))]))
-                return x[self.stratSplits[0].index(str(self.dealer.upCard()))]
-
     def autoPlay(self):
         # # temp strategy
-        # while(len(self.currentPlayer.hand) < 5 and self.currentPlayer.value < 17):
+        # while(len(self.players[self.currentPlayer].hand) < 5 and self.players[self.currentPlayer].value < 17):
         #     self.hit()
 
         # Actual strategy
-        while(not self.currentPlayer.isDone):
-            if(len(self.currentPlayer.hand) == 1):
+        currplayer = self.players[self.currentPlayer]
+        dealerupcard = self.dealer.upCard()
+        
+        while(not currplayer.isDone):
+            currplayersplit = currplayer.canSplit()
+            if(len(currplayer.hand) == 1):
                 if(self.verbose == 1):
-                    print("Player " + str(self.currentPlayer.playerNum) + " gets 2nd card after splitting")
+                    print("Player " + str(currplayer.playerNum) + " gets 2nd card after splitting")
                 self.deal()
-                self.currentPlayer.evaluate()
+                currplayer.evaluate()
 
-            if(len(self.currentPlayer.hand) < 5 and self.currentPlayer.value < 21):
-                if(self.currentPlayer.canSplit() == 'A'):
+            if(len(currplayer.hand) < 5 and currplayer.value < 21):
+                if(currplayersplit == 'A'):
                     self.splitAces()
-                elif(self.currentPlayer.canSplit() and self.currentPlayer.canSplit() not in [5, 10, "J", "Q", "K"]):
-                    self.do(utils.getAction(self.currentPlayer.canSplit(),self.dealer.upCard(),self.stratSplits))
-                elif(self.currentPlayer.isSoft):
-                    self.do(utils.getAction(self.currentPlayer.value,self.dealer.upCard(),self.stratSoft))
+                elif(currplayersplit and currplayersplit not in [5, 10, "J", "Q", "K"]):
+                    self.do(utils.getAction(currplayersplit,dealerupcard,self.stratSplits))
+                elif(currplayer.isSoft):
+                    self.do(utils.getAction(currplayer.value,dealerupcard,self.stratSoft))
                 else:
-                    self.do(utils.getAction(self.currentPlayer.value,self.dealer.upCard(),self.stratHard))
+                    self.do(utils.getAction(currplayer.value,dealerupcard,self.stratHard))
             else:
                 self.stand()
         self.nextPlayer()
@@ -208,7 +192,7 @@ class Table:
             if player.value < 22:
                 allBusted = False
         self.dealer.hand[1].faceDown = False
-        self.updateCount(self.dealer.hand[1])
+        self.runningCount += self.dealer.hand[1].count
         self.dealer.evaluate()
         if(self.verbose):
             print("Dealer's turn")
@@ -221,18 +205,17 @@ class Table:
             while(self.dealer.value < 17 and len(self.dealer.hand) < 5):
                 if(self.verbose):
                     print("Dealer hits")
-                self.deal()
+                self.dealDealer()
                 self.dealer.evaluate()
                 if(self.verbose):
                     self.print()
             self.finishRound()
 
     def nextPlayer(self):
-        if (self.currentPlayer != self.dealer and self.players.index(self.currentPlayer) < len(self.players)-1):
-            self.currentPlayer = self.players[self.players.index(self.currentPlayer)+1]
+        if (self.currentPlayer < len(self.players)-1):
+            self.currentPlayer += 1
             self.autoPlay() 
         else:
-            self.currentPlayer = self.dealer
             self.dealerPlay()
 
     def checkPlayerNatural(self):
@@ -243,7 +226,7 @@ class Table:
     def checkDealerNatural(self):
         if (self.dealer.evaluate() == 21):
             self.dealer.hand[1].faceDown = False
-            self.updateCount(self.dealer.hand[1])
+            self.runningCount += self.dealer.hand[1].count
             if(self.verbose):
                 self.print()
                 print("Dealer has a natural 21\n")

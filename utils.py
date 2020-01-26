@@ -1,5 +1,5 @@
 def getAction(playerval, dealerval, strategy):
-    key = str(playerval) + "/" + str(dealerval)
+    key = ((playerval + dealerval) * (playerval + dealerval + 1))/ 2 + dealerval
     return strategy[key]
 
 def readArray(file):
@@ -12,9 +12,11 @@ def readArray(file):
 def ArrayToDict(array):
     dict = {}
     for row in range(len(array)):
+        playerval = int(array[row][0])
         for col in range(len(array[0])):
+            dealerval = int(array[0][col])
             if(row != 0 and col != 0):
-                key = array[row][0] + "/" + array[0][col]
+                key = ((playerval + dealerval) * (playerval + dealerval + 1))/ 2 + dealerval
                 dict[key] = array[row][col]
     return dict
 
