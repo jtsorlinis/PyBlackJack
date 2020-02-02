@@ -75,20 +75,24 @@ class Player:
         return output
 
     def evaluate(self):
-        self.aces = 0
-        self.value = 0
+        aces = 0
+        value = 0
         for card in self.hand:
-            self.value += card.value
+            value += card.value
             # Check for an ace
-            if card.rank == 'A':
-                self.aces += 1
-                self.isSoft = True
+            if card.isAce:
+                aces += 1
+                isSoft = True
 
-        while(self.value > 21 and self.aces > 0):
-                self.value -= 10
-                self.aces -= 1
+        while(value > 21 and aces > 0):
+                value -= 10
+                aces -= 1
         
-        if self.aces == 0:
-            self.isSoft = False
+        if aces == 0:
+            isSoft = False
+
+        self.value = value
+        self.aces = aces
+        self.isSoft = isSoft
 
         return self.value

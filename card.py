@@ -5,8 +5,10 @@ class Card:
         self.rank = rank
         self.suit = suit
         self.faceDown = False
+        self.isAce = True if self.rank == "A" else False
         self.value = self.evaluate()
-        self.count = self.count()
+        self.count = self.countCard()
+        
 
     def print(self):
         if (self.faceDown):
@@ -17,12 +19,12 @@ class Card:
     def evaluate(self):
         if self.rank in ["J", "Q", "K"]:
             return 10
-        elif self.rank == "A":
+        elif self.isAce:
             return 11
         else:
             return self.rank
     
-    def count(self):
+    def countCard(self):
         if self.rank in [10, "J", "Q", "K", "A"]:
             return -1
         elif self.rank in [7,8,9]:

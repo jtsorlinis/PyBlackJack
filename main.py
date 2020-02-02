@@ -15,6 +15,9 @@ mincards = 40
 rounds = 100000
 verbose = 0
 
+if(len(sys.argv) == 2):
+    rounds = int(sys.argv[1])
+
 if(verbose and rounds > 100):
     sys.stdout = open('output.txt', 'w')
 
