@@ -21,16 +21,14 @@ if(verbose and rounds > 100):
 table1 = Table(players,decks,betsize, mincards,verbose)
 table1.cardpile.shuffle()
 
-x=0
 start = time.perf_counter()
-while(x<rounds):
+for x in range(0,rounds):
     if(verbose):
         print("Round " + str(x+1))
     if(not verbose and rounds>1000 and x % (rounds/100) == 0):
         print("\tProgress: " + str(int(x/rounds*100)),end="%\r")
     table1.startRound()
     table1.checkEarnings()
-    x+=1
 
 for player in table1.players:
     if(not player.splitFrom):
@@ -39,4 +37,4 @@ print("Casino earnings: " + str(table1.casinoEarnings))
 
 end = time.perf_counter()
 duration = end - start
-print ("Played " + str(x) + " rounds in " + format(duration, ".2f") + " seconds")
+print ("Played " + str(x+1) + " rounds in " + format(duration, ".2f") + " seconds")
