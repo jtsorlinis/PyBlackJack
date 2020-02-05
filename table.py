@@ -150,7 +150,7 @@ class Table:
         dealerupcard = self.dealer.upCard()
         
         while(not currplayer.isDone):
-            currplayersplit = currplayer.canSplit()
+            
             if(len(currplayer.hand) == 1):
                 if(self.verbose == 1):
                     print("Player " + str(currplayer.playerNum) + " gets 2nd card after splitting")
@@ -158,10 +158,11 @@ class Table:
                 currplayer.evaluate()
 
             if(len(currplayer.hand) < 5 and currplayer.value < 21):
-                if(currplayersplit == 'A'):
+                splitPlayerVal = currplayer.canSplit()
+                if(splitPlayerVal == 11):
                     self.splitAces()
-                elif(currplayersplit and currplayersplit not in [5, 10, "J", "Q", "K"]):
-                    self.do(utils.getAction(currplayersplit,dealerupcard,self.stratSplits))
+                elif(splitPlayerVal != 0 and (splitPlayerVal != 5 and splitPlayerVal != 10)):
+                    self.do(utils.getAction(splitPlayerVal,dealerupcard,self.stratSplits))
                 elif(currplayer.isSoft):
                     self.do(utils.getAction(currplayer.value,dealerupcard,self.stratSoft))
                 else:

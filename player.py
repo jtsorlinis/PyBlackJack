@@ -41,9 +41,9 @@ class Player:
 
     def canSplit(self):
         if(len(self.hand) == 2 and (self.hand[0].rank == self.hand[1].rank) and self.splitCount < Player.maxSplits):
-            return self.hand[0].rank
+            return self.hand[0].value
         else:
-            return False
+            return 0
 
     def win(self, mult=1):
         if(self.splitFrom):
