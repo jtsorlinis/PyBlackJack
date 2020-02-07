@@ -1,5 +1,0 @@
-*.c
-*.so
-*.html
-*.pyd
-build/
