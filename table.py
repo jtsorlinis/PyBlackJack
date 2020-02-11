@@ -192,6 +192,7 @@ class Table:
         for player in self.players:
             if player.value < 22:
                 allBusted = False
+                break
         self.dealer.hand[1].faceDown = False
         self.runningCount += self.dealer.hand[1].count
         self.dealer.evaluate()
@@ -232,8 +233,7 @@ class Table:
                 self.print()
                 print("Dealer has a natural 21\n")
             return True
-        else:
-            return False
+        return False
 
     def checkEarnings(self):
         check = 0
