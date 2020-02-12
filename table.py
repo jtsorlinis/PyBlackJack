@@ -1,7 +1,7 @@
 from dealer import Dealer
 from player import Player
 from cardpile import CardPile
-import utils
+import strategies
 
 class Table:
     def __init__(self, numplayers, numofdecks, betsize, mincards, verbose=False):
@@ -18,9 +18,9 @@ class Table:
         self.casinoEarnings = 0
         self.runningCount = 0
         self.trueCount = 0
-        self.stratHard = utils.fileToDict('strategyHard.txt')
-        self.stratSoft = utils.fileToDict('strategySoft.txt')
-        self.stratSplits = utils.fileToDict('strategySplits.txt')
+        self.stratHard = strategies.ArrayToDict(strategies.stratHard)
+        self.stratSoft = strategies.ArrayToDict(strategies.stratSoft)
+        self.stratSplit = strategies.ArrayToDict(strategies.stratSplit)
 
     def dealRound(self):
         for player in self.players:
@@ -162,11 +162,11 @@ class Table:
                 if(splitPlayerVal == 11):
                     self.splitAces()
                 elif(splitPlayerVal != 0 and (splitPlayerVal != 5 and splitPlayerVal != 10)):
-                    self.do(utils.getAction(splitPlayerVal,dealerupcard,self.stratSplits))
+                    self.do(strategies.getAction(splitPlayerVal,dealerupcard,self.stratSplit))
                 elif(currplayer.isSoft):
-                    self.do(utils.getAction(currplayer.value,dealerupcard,self.stratSoft))
+                    self.do(strategies.getAction(currplayer.value,dealerupcard,self.stratSoft))
                 else:
-                    self.do(utils.getAction(currplayer.value,dealerupcard,self.stratHard))
+                    self.do(strategies.getAction(currplayer.value,dealerupcard,self.stratHard))
             else:
                 self.stand()
         self.nextPlayer()
