@@ -42,8 +42,7 @@ class Player:
         self.initialBet = self.table.betsize
 
     def canSplit(self):
-        if(len(self.hand) == 2 and (self.hand[0].rank == self.hand[1].rank)
-           and self.splitCount < Player.maxSplits):
+        if(len(self.hand) == 2 and (self.hand[0].rank == self.hand[1].rank) and self.splitCount < Player.maxSplits):
             return self.hand[0].value
         return 0
 
@@ -73,7 +72,7 @@ class Player:
         else:
             output += "       "
         if self.playerNum != "D":
-            output += "\tBet: " + str(self.initialBet*self.betMult)
+            output += "\tBet: " + str(self.initialBet * self.betMult)
         return output
 
     def evaluate(self):
@@ -98,4 +97,3 @@ class Player:
         self.isSoft = isSoft
 
         return self.value
-        
