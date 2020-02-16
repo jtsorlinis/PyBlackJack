@@ -1,4 +1,4 @@
-stratHard = [
+STRAT_HARD = [
     ["0", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"],
     ["2", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H"],
     ["3", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H"],
@@ -22,7 +22,7 @@ stratHard = [
     ["21", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S"],
 ]
 
-stratSoft = [
+STRAT_SOFT = [
     ["0", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"],
     ["13", "H", "H", "H", "D", "D", "H", "H", "H", "H", "H"],
     ["14", "H", "H", "H", "D", "D", "H", "H", "H", "H", "H"],
@@ -35,7 +35,7 @@ stratSoft = [
     ["21", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S"],
 ]
 
-stratSplit = [
+STRAT_SPLIT = [
     ["0", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"],
     ["2", "P", "P", "P", "P", "P", "P", "H", "H", "H", "H"],
     ["3", "P", "P", "P", "P", "P", "P", "H", "H", "H", "H"],
@@ -48,7 +48,7 @@ stratSplit = [
 ]
 
 
-def getAction(playerval, dealerval, strategy):
+def get_action(playerval, dealerval, strategy):
     key = ((playerval + dealerval) * (playerval + dealerval + 1)) / 2 + dealerval
     return strategy[key]
 
@@ -61,7 +61,7 @@ def getAction(playerval, dealerval, strategy):
 #     return array
 
 
-def ArrayToDict(array):
+def array_to_dict(array):
     temp = {}
     for row, _ in enumerate(array):
         playerval = int(array[row][0])

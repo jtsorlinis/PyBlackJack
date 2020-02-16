@@ -2,44 +2,48 @@ import time
 import sys
 from table import Table
 
-players = 5
-decks = 8
-betsize = 10
-mincards = 40
+PLAYERS = 5
+DECKS = 8
+BET_SIZE = 10
+MIN_CARDS = 40
 
-rounds = 1000000
-verbose = 0
+ROUNDS = 100000
+VERBOSE = 0
 
 if len(sys.argv) == 2:
-    rounds = int(sys.argv[1])
+    ROUNDS = int(sys.argv[1])
 
-if verbose and rounds > 100:
+if VERBOSE and ROUNDS > 100:
     sys.stdout = open("output.txt", "w")
 
-table1 = Table(players, decks, betsize, mincards, verbose)
-table1.cardpile.shuffle()
+T = Table(PLAYERS, DECKS, BET_SIZE, MIN_CARDS, VERBOSE)
+T.cardpile.shuffle()
 
-start = time.perf_counter()
-for x in range(0, rounds):
-    if verbose:
+START_TIME = time.perf_counter()
+for x in range(0, ROUNDS):
+    if VERBOSE:
         print("Round " + str(x + 1))
-    if not verbose and rounds > 1000 and x % (rounds / 100) == 0:
-        print("\tProgress: " + str(int(x / rounds * 100)), end="%\r")
-    table1.startRound()
-    table1.checkEarnings()
+    if not VERBOSE and ROUNDS > 1000 and x % (ROUNDS / 100) == 0:
+        print("\tProgress: " + str(int(x / ROUNDS * 100)), end="%\r")
+    T.start_round()
+    T.check_earnings()
 
-for player in table1.players:
-    if not player.splitFrom:
+for player in T.players:
+    if not player.split_from:
         print(
             "Player "
-            + str(player.playerNum)
+            + str(player.player_num)
             + " earnings: "
             + str(player.earnings)
             + "\t\tWin percentage: "
-            + str(50 + (player.earnings / (rounds * betsize) * 50))
+            + str(50 + (player.earnings / (ROUNDS * BET_SIZE) * 50))
         )
-print("Casino earnings: " + str(table1.casinoEarnings))
+print("Casino earnings: " + str(T.casino_earnings))
 
-end = time.perf_counter()
-duration = end - start
-print("Played " + str(x + 1) + " rounds in " + format(duration, ".2f") + " seconds")
+print(
+    "Played "
+    + str(x + 1)
+    + " rounds in "
+    + format(time.perf_counter() - START_TIME, ".2f")
+    + " seconds"
+)

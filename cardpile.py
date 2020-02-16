@@ -1,5 +1,5 @@
-from deck import Deck
 import random
+from deck import Deck
 
 
 class CardPile:
@@ -7,7 +7,7 @@ class CardPile:
         self.cards = []
         for _ in range(0, numofdecks):
             self.cards += Deck().cards
-        self.originalCards = self.cards.copy()
+        self.original_cards = self.cards.copy()
 
     def print(self):
         string = ""
@@ -23,4 +23,4 @@ class CardPile:
             self.cards[i], self.cards[j] = self.cards[j], self.cards[i]
 
     def refresh(self):
-        self.cards = list(self.originalCards)
+        self.cards = list(self.original_cards)

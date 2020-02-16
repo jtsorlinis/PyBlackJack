@@ -5,12 +5,12 @@ class Dealer(Player):
     def __init__(self):
         Player.__init__(self)
         self.hand = []
-        self.playerNum = "D"
+        self.player_num = "D"
         self.value = 0
 
-    def resetHand(self):
+    def reset_hand(self):
         self.hand = []
         self.value = 0
 
-    def upCard(self):
-        return self.hand[0].evaluate()
+    def up_card(self):
+        return self.hand[0].value
