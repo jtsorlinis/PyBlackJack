@@ -8,7 +8,7 @@ class Card:
         self.count = self.countCard()
 
     def print(self):
-        if (self.faceDown):
+        if self.faceDown:
             return "X"
         else:
             return str(self.rank)

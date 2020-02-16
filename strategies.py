@@ -19,7 +19,7 @@ stratHard = [
     ["18", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S"],
     ["19", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S"],
     ["20", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S"],
-    ["21", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S"]
+    ["21", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S"],
 ]
 
 stratSoft = [
@@ -32,7 +32,7 @@ stratSoft = [
     ["18", "S", "D", "D", "D", "D", "S", "S", "H", "H", "H"],
     ["19", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S"],
     ["20", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S"],
-    ["21", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S"]
+    ["21", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S"],
 ]
 
 stratSplit = [
@@ -44,13 +44,14 @@ stratSplit = [
     ["7", "P", "P", "P", "P", "P", "P", "H", "H", "H", "H"],
     ["8", "P", "P", "P", "P", "P", "P", "P", "P", "P", "P"],
     ["9", "P", "P", "P", "P", "P", "S", "P", "P", "S", "S"],
-    ["11", "P", "P", "P", "P", "P", "P", "P", "P", "P", "P"]
+    ["11", "P", "P", "P", "P", "P", "P", "P", "P", "P", "P"],
 ]
 
 
 def getAction(playerval, dealerval, strategy):
     key = ((playerval + dealerval) * (playerval + dealerval + 1)) / 2 + dealerval
     return strategy[key]
+
 
 # def readArray(file):
 #     file = open(file).read()
@@ -66,11 +67,13 @@ def ArrayToDict(array):
         playerval = int(array[row][0])
         for col, _ in enumerate(array[0]):
             dealerval = int(array[0][col])
-            if(row != 0 and col != 0):
-                key = ((playerval + dealerval) *
-                       (playerval + dealerval + 1)) / 2 + dealerval
+            if row != 0 and col != 0:
+                key = (
+                    (playerval + dealerval) * (playerval + dealerval + 1)
+                ) / 2 + dealerval
                 temp[key] = array[row][col]
     return temp
+
 
 # def fileToDict(file):
 #     return ArrayToDict(readArray(file))

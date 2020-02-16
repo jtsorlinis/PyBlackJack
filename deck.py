@@ -4,8 +4,8 @@ from card import Card
 suits = ["Clubs", "Hearts", "Spades", "Diamonds"]
 ranks = ["A", 2, 3, 4, 5, 6, 7, 8, 9, 10, "J", "Q", "K"]
 
-class Deck:
 
+class Deck:
     def __init__(self):
         self.cards = []
         for suit in suits:
@@ -20,4 +20,3 @@ class Deck:
 
     def shuffle(self):
         random.shuffle(self.cards)
-        
