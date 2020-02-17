@@ -7,7 +7,7 @@ DECKS = 8
 BET_SIZE = 10
 MIN_CARDS = 40
 
-ROUNDS = 100000
+ROUNDS = 1000000
 VERBOSE = 0
 
 if len(sys.argv) == 2:
@@ -24,7 +24,7 @@ for x in range(0, ROUNDS):
     if VERBOSE:
         print("Round " + str(x + 1))
     if not VERBOSE and ROUNDS > 1000 and x % (ROUNDS / 100) == 0:
-        print("\tProgress: " + str(int(x / ROUNDS * 100)), end="%\r")
+        print("\tProgress: " + str(int(x * 100 / ROUNDS)), end="%\r")
     T.start_round()
     T.check_earnings()
 
