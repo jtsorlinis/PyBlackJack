@@ -27,9 +27,12 @@ class Table:
     def deal_round(self):
         for player in self.players:
             self.deal()
-            player.evaluate()
             self.current_player += 1
         self.current_player = 0
+
+    def evaluate_all(self):
+        for player in self.players:
+            player.evaluate()
 
     def pre_deal(self):
         for player in self.players:
@@ -64,6 +67,7 @@ class Table:
         self.deal_dealer()
         self.deal_round()
         self.deal_dealer(True)
+        self.evaluate_all()
         self.current_player = 0
         if self.check_dealer_natural():
             self.finish_round()
