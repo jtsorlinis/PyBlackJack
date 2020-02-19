@@ -41,7 +41,7 @@ class Table:
     # check count and bet accordingly
     def select_bet(self, player):
         if int(self.true_count) >= 2:
-            player.initial_bet = self.betsize * (int(self.true_count - 1) * 1.25)
+            player.initial_bet = int(self.betsize * (self.true_count - 1))
 
     def deal_dealer(self, face_down=False):
         card = self.cardpile.cards.pop()
@@ -105,8 +105,8 @@ class Table:
         self.running_count += card.count
 
     def update_count(self):
-        self.true_count = self.running_count / (len(self.cardpile.cards) / 52)
-        # print(self.running_count)
+        if len(self.cardpile.cards) > 51:
+            self.true_count = self.running_count / int(len(self.cardpile.cards) / 52)
 
     def hit(self):
         if self.verbose == 1:
