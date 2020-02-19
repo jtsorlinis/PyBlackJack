@@ -128,7 +128,6 @@ class Table:
 
     def split(self):
         split_player = Player(self, self.players[self.current_player])
-        self.players[self.current_player].hand.pop()
         self.players.insert(self.current_player + 1, split_player)
         self.players[self.current_player].evaluate()
         self.players[self.current_player + 1].evaluate()
@@ -145,7 +144,6 @@ class Table:
                 + " splits aces"
             )
         split_player = Player(self, self.players[self.current_player])
-        self.players[self.current_player].hand.pop()
         self.players.insert(self.current_player + 1, split_player)
         self.deal()
         self.players[self.current_player].evaluate()

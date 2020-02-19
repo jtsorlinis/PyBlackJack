@@ -20,7 +20,7 @@ class Player:
             self.initial_bet = self.table.betsize
 
         if split:
-            self.hand = [split.hand[1]]
+            self.hand.append(split.hand.pop())
             self.split_count = split.split_count + 1
             self.player_num = str(split.player_num) + "S"
             self.initial_bet = split.initial_bet
