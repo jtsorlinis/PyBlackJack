@@ -17,11 +17,11 @@ class Card:
             return 10
         if self.is_ace:
             return 11
-        return self.rank
+        return int(self.rank)
 
     def count_card(self):
-        if self.rank in [10, "J", "Q", "K", "A"]:
+        if self.rank in ["10", "J", "Q", "K", "A"]:
             return -1
-        if self.rank in [7, 8, 9]:
+        if self.rank in ["7", "8", "9"]:
             return 0
         return 1
