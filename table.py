@@ -25,7 +25,7 @@ class Table:
         self.strat_split = strategies.array_to_dict(strategies.STRAT_SPLIT)
 
     def deal_round(self):
-        for player in self.players:
+        for _ in self.players:
             self.deal()
             self.current_player += 1
         self.current_player = 0
