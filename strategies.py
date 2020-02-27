@@ -50,7 +50,7 @@ STRAT_SPLIT = [
 
 def get_action(playerval, dealerval, strategy):
     key = ((playerval + dealerval) * (playerval + dealerval + 1)) / 2 + dealerval
-    return strategy[key]
+    return strategy[int(key)]
 
 
 # def readArray(file):
@@ -62,16 +62,14 @@ def get_action(playerval, dealerval, strategy):
 
 
 def array_to_dict(array):
-    temp = {}
+    temp = [0]*1000
     for row, _ in enumerate(array):
         playerval = int(array[row][0])
         for col, _ in enumerate(array[0]):
             dealerval = int(array[0][col])
             if row != 0 and col != 0:
-                key = (
-                    (playerval + dealerval) * (playerval + dealerval + 1)
-                ) / 2 + dealerval
-                temp[key] = array[row][col]
+                key = ((playerval + dealerval) * (playerval + dealerval + 1)) / 2 + dealerval
+                temp[int(key)] = array[row][col]
     return temp
 
 
